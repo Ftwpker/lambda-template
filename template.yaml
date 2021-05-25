@@ -1,0 +1,32 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+  env:
+    Type: String
+    AllowedValues:
+      - test
+      - qa
+      - prod
+
+Resources:
+  HelloLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./target/lambda-template-1.0-SNAPSHOT.jar
+      FunctionName: !Sub "HelloLambda"
+      Handler: HelloLambda
+      Runtime: java8
+      AutoPublishAlias: live
+      Timeout: 10
+      MemorySize: 256
+      Role: "arn:aws:iam::675889060638:role/service-role/lambdaRole"
+      Environment:
+        Variables:
+          env: !Ref env
+
+#  HelloLambdaLogGroup:
+#    Type: "AWS::Logs::LogGroup"
+#    Properties:
+#     LogGroupName: !Sub "lambda/HelloLambda"
+#     RetentionInDays: 30
